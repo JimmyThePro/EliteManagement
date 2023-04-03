@@ -25,4 +25,10 @@ internal class UserEntity
 
     public int UserTypeId { get; set; }
     public int AddressId { get; set; }
+
+    public UserTypeEntity UserType { get; set; } = null!;
+    public AddressEntity Address { get; set; } = null!;
+
+    public ICollection<CaseEntity> Cases { get; set; } = new HashSet<CaseEntity>();
+    public ICollection<CommentEntity> Comments { get; set; } = new HashSet<CommentEntity>();
 }

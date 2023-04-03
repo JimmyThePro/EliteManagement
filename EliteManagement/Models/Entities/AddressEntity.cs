@@ -18,4 +18,6 @@ internal class AddressEntity
     [Required]
     [StringLength(50)]
     public string City { get; set; } = null!;
+
+    public ICollection<UserEntity> Users { get; set;} = new HashSet<UserEntity>();
 }

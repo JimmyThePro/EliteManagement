@@ -6,7 +6,7 @@ namespace EliteManagement.Contexts;
 internal class DataContext : DbContext
 {
     #region constructors & overrides
-    protected DataContext()
+    public DataContext()
     {
     }
 
