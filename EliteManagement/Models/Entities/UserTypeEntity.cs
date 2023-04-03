@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace EliteManagement.Models.Entities;
 
-namespace EliteManagement.Models.Entities
+internal class UserTypeEntity
 {
-    internal class UserTypeEntity
-    {
-    }
+    public int Id { get; set; }
+    public string TypeName { get; set; } = null!;
 }
