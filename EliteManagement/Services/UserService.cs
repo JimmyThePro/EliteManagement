@@ -16,7 +16,7 @@ internal class UserService : GenericService<UserEntity>
 
     public override async Task<UserEntity> GetAsync(Expression<Func<UserEntity, bool>> predicate)
     {
-        var item = await _context.Users.Include(x => x.Address).Include(x => x.UserType).FirstOrDefaultAsync(predicate);
+        var item = await _context.Users.Include(x => x.Address).Include(x => x.UserType).FirstOrDefaultAsync(predicate, CancellationToken.None);
         if (item != null)
         {
             return item;

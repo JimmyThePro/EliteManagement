@@ -29,7 +29,7 @@ internal abstract class GenericService<TEntity> where TEntity : class
 
     public virtual async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate)
     {
-        var item = await _context.Set<TEntity>().FirstOrDefaultAsync(predicate);
+        var item = await _context.Set<TEntity>().FirstOrDefaultAsync(predicate, CancellationToken.None);
         if (item != null)
         {
             return item;
