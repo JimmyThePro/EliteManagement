@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace EliteManagement.Services;
 
-internal class GenericService<TEntity> where TEntity : class
+internal abstract class GenericService<TEntity> where TEntity : class
 {
     private readonly DataContext _context = new DataContext();
 
@@ -23,7 +23,7 @@ internal class GenericService<TEntity> where TEntity : class
         return null!;
     }
 
-    public async Task<TEntity> SaveAsync(TEntity entity, Expression<Func<TEntity, bool>> predicate)
+    public virtual async Task<TEntity> SaveAsync(TEntity entity, Expression<Func<TEntity, bool>> predicate)
     {
         var item = await GetAsync(predicate);
         if (item == null)
