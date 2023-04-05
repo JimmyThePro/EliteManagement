@@ -9,19 +9,6 @@ internal abstract class GenericService<TEntity> where TEntity : class
 {
     private readonly DataContext _context = new DataContext();
 
-    public async Task CreateStatusTypesAsync()
-    {
-        if (!await _context.StatusTypes.AnyAsync())
-        {
-            string[] _statuses = new string[] { "Ej påbörjad", "Pågående", "Avslutad" };
-            foreach (var _status in _statuses)
-            {
-                await _context.AddAsync(new StatusTypeEntity { StatusName = _status });
-                await _context.SaveChangesAsync();
-            }
-        }
-    }
-
     public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
     {
         return await _context.Set<TEntity>().ToListAsync();

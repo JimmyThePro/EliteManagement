@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EliteManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230405080421_Tables")]
+    [Migration("20230405100017_Tables")]
     partial class Tables
     {
         /// <inheritdoc />
@@ -64,8 +64,8 @@ namespace EliteManagement.Migrations
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -118,9 +118,11 @@ namespace EliteManagement.Migrations
 
             modelBuilder.Entity("EliteManagement.Models.Entities.UserEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()

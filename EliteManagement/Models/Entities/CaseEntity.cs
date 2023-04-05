@@ -29,6 +29,7 @@ internal class CaseEntity
     public int StatusId { get; set; } = 1;
     public StatusTypeEntity Status { get; set; } = null!;
 
+    public int UserId { get; set; }
     public UserEntity User { get; set; } = null!;
 
     public ICollection<CommentEntity> Comments { get; set; } = new List<CommentEntity>();

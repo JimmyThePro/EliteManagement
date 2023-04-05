@@ -6,7 +6,7 @@ namespace EliteManagement.Models.Entities;
 
 internal class UserEntity
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 
     [Required]
     [StringLength(50)]

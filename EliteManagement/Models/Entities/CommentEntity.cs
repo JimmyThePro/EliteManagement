@@ -9,5 +9,6 @@ internal class CommentEntity
     public DateTime Created { get; set; } = DateTime.Now;
     public string Comment { get; set; } = null!;
 
+    public int CaseId { get; set; }
     public CaseEntity Case { get; set; } = null!;
 }

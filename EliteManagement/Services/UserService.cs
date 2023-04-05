@@ -5,9 +5,9 @@ using System.Linq.Expressions;
 
 namespace EliteManagement.Services;
 
-internal class UserService : GenericService<UserEntity>
+internal class UserService
 {
-    private readonly DataContext _context = new DataContext();
+    private readonly DataContext _context = new();
 
     public async Task<UserEntity> CreateAsync(UserEntity entity)
     {
@@ -22,23 +22,14 @@ internal class UserService : GenericService<UserEntity>
         return _entity;
     }
 
-    public override async Task<IEnumerable<UserEntity>> GetAllAsync()
+    public async Task<UserEntity> GetAsync(Expression<Func<UserEntity, bool>> predicate)
     {
-        return await _context.Users.Include(x => x.Id).Include(x => x.Email).ToListAsync();
+        var _entity = await _context.Users.FirstOrDefaultAsync(predicate);
+        return _entity!;
     }
 
-    public override async Task<UserEntity> GetAsync(Expression<Func<UserEntity, bool>> predicate)
+    public async Task<IEnumerable<UserEntity>> GetAllAsync()
     {
-        var item = await _context.Users.Include(x => x.Id).Include(x => x.Email).FirstOrDefaultAsync(predicate, CancellationToken.None);
-        if (item != null)
-        {
-            return item;
-        }
-        return null!;
-    }
-
-    public override Task<UserEntity> SaveAsync(UserEntity entity, Expression<Func<UserEntity, bool>> predicate)
-    {
-        return base.SaveAsync(entity, predicate);
+        return await _context.Users.ToListAsync();
     }
 }

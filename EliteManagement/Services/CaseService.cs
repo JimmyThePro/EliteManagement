@@ -5,9 +5,9 @@ using System.Linq.Expressions;
 
 namespace EliteManagement.Services;
 
-internal class CaseService : GenericService<CaseEntity>
+internal class CaseService
 {
-    private readonly DataContext _context = new DataContext();
+    private readonly DataContext _context = new();
 
     public async Task CreateAsync(CaseEntity entity)
     {
@@ -15,23 +15,54 @@ internal class CaseService : GenericService<CaseEntity>
         await _context.SaveChangesAsync();
     }
 
-    public override async Task<IEnumerable<CaseEntity>> GetAllAsync()
+    public async Task<IEnumerable<CaseEntity>> GetAllActiveAsync()
     {
-        return await _context.Cases.Include(x => x.User).Include(x => x.Id).ToListAsync();
+        return await _context.Cases
+            .Include(x => x.Comments)
+            .Include(x => x.User)
+            .Include(x => x.Status)
+            .Where(x => x.StatusId != 3)
+            .OrderByDescending(x => x.Created)
+            .ToListAsync();
     }
 
-    public override async Task<CaseEntity> GetAsync(Expression<Func<CaseEntity, bool>> predicate)
+    public async Task<IEnumerable<CaseEntity>> GetAllAsync()
     {
-        var item = await _context.Cases
-            .Include(x => x.User)
-            .Include(x => x.User).ThenInclude(x => x.Id)
-            .Include(x => x.User).ThenInclude(x => x.Email)
+        return await _context.Cases
             .Include(x => x.Comments)
+            .Include(x => x.User)
+            .Include(x => x.Status)
+            .OrderByDescending(x => x.Created)
+            .ToListAsync();
+    }
+
+    public async Task<CaseEntity> GetAsync(Expression<Func<CaseEntity, bool>> predicate)
+    {
+        var _entity = await _context.Cases
+            .Include(x => x.Comments)
+            .Include(x => x.User)
+            .Include(x => x.Status)
             .FirstOrDefaultAsync(predicate);
-        if (item != null)
+
+        return _entity!;
+    }
+
+    public async Task UpdateCaseStatusAsync(int caseId, int statusId)
+    {
+        var _entity = await _context.Cases.FindAsync(caseId);
+        if (_entity != null)
         {
-            return item;
+            _entity.Modified = DateTime.Now;
+            _entity.StatusId = statusId;
+            _context.Update(_entity);
+            await _context.SaveChangesAsync();
         }
-        return null!;
+    }
+
+    public async Task CreateCommentAsync(CommentEntity comment)
+    {
+        await _context.AddAsync(comment);
+        await _context.SaveChangesAsync();
+        await UpdateCaseStatusAsync(comment.CaseId, 2);
     }
 }
