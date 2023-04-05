@@ -3,7 +3,7 @@
 ## Elite Management
 
 A staffing company that uses this system to manage their cases.
-(C#, entity framework, local SQLserver file)
+(C#, Entity Framework Core (code first), local SQL-database file)
 
 ## Futures
 
