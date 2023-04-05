@@ -13,7 +13,7 @@ internal class MenuService
         Console.WriteLine("=================================");
         Console.WriteLine("======= Elite Management! =======");
         Console.WriteLine("=================================\n");
-        Console.WriteLine(" [1] - Create a case manager.");
+        Console.WriteLine(" [1] - Create a new user.");
         Console.WriteLine(" [2] - View all cases.");
         Console.WriteLine(" [3] - Create a new case.");
         Console.WriteLine(" [4] - Update a case.\n");
@@ -45,10 +45,16 @@ internal class MenuService
     {
         var _entity = new UserEntity();
         Console.Clear();
-        Console.WriteLine("========== Create new case manager ==========\n");
-        Console.Write(" Case manager: ");
+        Console.WriteLine("========== Create a new user ==========\n");
+        Console.Write(" Firstname: ");
         _entity.FirstName = Console.ReadLine() ?? "";
-        Console.WriteLine($" --> '{_entity.FirstName}' created successfully!");
+        Console.Write(" Lastname: ");
+        _entity.LastName = Console.ReadLine() ?? "";
+        Console.Write(" Email: ");
+        _entity.Email = Console.ReadLine() ?? "";
+        Console.Write(" Phonenumber: ");
+        _entity.PhoneNumber = Console.ReadLine() ?? "";
+        Console.WriteLine($" --> '{_entity.FirstName} {_entity.LastName}' was created successfully!");
 
         return await _userService.SaveAsync(_entity);
     }
