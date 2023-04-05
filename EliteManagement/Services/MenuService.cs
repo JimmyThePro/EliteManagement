@@ -92,6 +92,7 @@ internal class MenuService
         _entity.CustomerPhoneNumber = Console.ReadLine() ?? "";
         Console.Write(" Customer Profession: ");
         _entity.CustomerProfession = Console.ReadLine() ?? "";
+        Console.WriteLine("\n New case created successfully!");
 
         await _caseService.CreateAsync(_entity);
     }
@@ -109,6 +110,7 @@ internal class MenuService
         _entity.Email = Console.ReadLine() ?? "";
         Console.Write(" Phonenumber: ");
         _entity.PhoneNumber = Console.ReadLine() ?? "";
+        Console.WriteLine("\n New user created successfully!");
 
         return await _userService.CreateAsync(_entity);
     }
@@ -117,7 +119,7 @@ internal class MenuService
     {
         Console.Clear();
         Console.WriteLine("=============== View a specific case ===============\n");
-        Console.Write("Enter case ID-number: ");
+        Console.Write(" Enter case ID-number: ");
         int id = int.Parse(Console.ReadLine());
         var _case = await _caseService.GetAsync(x => x.Id == id);
         if (_case != null)
@@ -141,20 +143,20 @@ internal class MenuService
     {
         Console.Clear();
         Console.WriteLine("=============== Update case status ===============\n");
-        Console.Write("Enter case ID-number: ");
+        Console.Write(" Enter case ID-number: ");
         int caseId = int.Parse(Console.ReadLine());
         
         var _case = await _caseService.GetAsync(x => x.Id == caseId);
         if (_case != null)
         {
-            Console.Write("Enter new status ID-number: ");
+            Console.Write("\n -- Enter new case status -- \n [1] = Not started [2] = Started [3] = Completed : ");
             int statusId = int.Parse(Console.ReadLine());
             await _caseService.UpdateCaseStatusAsync(caseId, statusId);
-            Console.WriteLine("Case status updated successfully.");
+            Console.WriteLine("\n Case status updated successfully!");
         }
         else
         {
-            Console.WriteLine(" Case-ID not found.");
+            Console.WriteLine("\n Case-ID not found.");
         }
     }
 }

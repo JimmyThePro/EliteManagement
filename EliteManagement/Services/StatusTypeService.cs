@@ -12,7 +12,7 @@ internal class StatusTypeService
     {
         if (!await _context.StatusTypes.AnyAsync())
         {
-            string[] _statuses = new string[] { "Ej påbörjad", "Pågående", "Avslutad" };
+            string[] _statuses = new string[] { "Not started", "Started", "Completed" };
 
             foreach (var status in _statuses)
             {
