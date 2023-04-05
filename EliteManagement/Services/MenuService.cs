@@ -149,7 +149,7 @@ internal class MenuService
         var _case = await _caseService.GetAsync(x => x.Id == caseId);
         if (_case != null)
         {
-            Console.Write("\n -- Enter new case status -- \n [1] = Not started [2] = Started [3] = Completed : ");
+            Console.Write("\n -- Enter new case status -- \n [1] = Not started [2] = In progress [3] = Completed : ");
             int statusId = int.Parse(Console.ReadLine());
             await _caseService.UpdateCaseStatusAsync(caseId, statusId);
             Console.WriteLine("\n Case status updated successfully!");

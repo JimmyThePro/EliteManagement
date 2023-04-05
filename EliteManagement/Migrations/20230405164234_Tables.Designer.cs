@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EliteManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230405100017_Tables")]
+    [Migration("20230405164234_Tables")]
     partial class Tables
     {
         /// <inheritdoc />
