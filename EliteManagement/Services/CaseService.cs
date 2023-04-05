@@ -15,17 +15,6 @@ internal class CaseService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<CaseEntity>> GetAllActiveAsync()
-    {
-        return await _context.Cases
-            .Include(x => x.Comments)
-            .Include(x => x.User)
-            .Include(x => x.Status)
-            .Where(x => x.StatusId != 3)
-            .OrderByDescending(x => x.Created)
-            .ToListAsync();
-    }
-
     public async Task<IEnumerable<CaseEntity>> GetAllAsync()
     {
         return await _context.Cases
@@ -43,7 +32,6 @@ internal class CaseService
             .Include(x => x.User)
             .Include(x => x.Status)
             .FirstOrDefaultAsync(predicate);
-
         return _entity!;
     }
 

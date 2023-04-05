@@ -16,7 +16,7 @@ internal class MenuService
         Console.WriteLine(" [1] View all cases.");
         Console.WriteLine(" [2] Create a new case.");
         Console.WriteLine(" [3] View all users.");
-        Console.WriteLine(" [4] Create a new user.");
+        Console.WriteLine(" [4] View a specific case.");
         Console.Write(" \nChoose an option: ");
         var option = Console.ReadLine();
 
@@ -34,9 +34,13 @@ internal class MenuService
                 await UsersAsync();
                 break;
 
+            case "4":
+                await GetCaseAsync();
+                break;
+
             default:
                 Console.Clear();
-                Console.Write(" No valid option! Try again...");
+                Console.Write(" No valid option! Please try again...");
                 break;
         }
     }
@@ -45,14 +49,13 @@ internal class MenuService
     {
         Console.Clear();
         Console.WriteLine("========== All cases ==========\n");
-        foreach (var _case in await _caseService.GetAllActiveAsync())
+        foreach (var _case in await _caseService.GetAllAsync())
         {
-            Console.WriteLine($"Ärendenummer: {_case.Id}");
-            Console.WriteLine($"Skapad: {_case.Created}");
-            Console.WriteLine($"Modifierad: {_case.Modified}");
-            Console.WriteLine($"Status: {_case.Status.StatusName}");
-            Console.WriteLine($"User: {_case.UserId}");
-            Console.WriteLine("");
+            Console.WriteLine($" Case ID-number: {_case.Id}");
+            Console.WriteLine($" Created: {_case.Created}");
+            Console.WriteLine($" Modified: {_case.Modified}");
+            Console.WriteLine($" Case status: {_case.Status.StatusName}");
+            Console.WriteLine($" User: {_case.UserId}\n");
         }
     }
 
@@ -62,10 +65,9 @@ internal class MenuService
         Console.WriteLine("========== All users ==========\n");
         foreach (var _user in await _userService.GetAllAsync())
         {
-            Console.WriteLine($"Handläggare-ID: {_user.Id}");
-            Console.WriteLine($"Namn: {_user.FirstName} {_user.LastName}");
-            Console.WriteLine($"E-postadress: {_user.Email}");
-            Console.WriteLine("");
+            Console.WriteLine($" User-ID: {_user.Id}");
+            Console.WriteLine($" Username: {_user.FirstName} {_user.LastName}");
+            Console.WriteLine($" Email: {_user.Email}\n");
         }
     }
 
@@ -104,5 +106,29 @@ internal class MenuService
         _entity.PhoneNumber = Console.ReadLine() ?? "";
 
         return await _userService.CreateAsync(_entity);
+    }
+
+    private async Task GetCaseAsync()
+    {
+        Console.Clear();
+        Console.WriteLine("=============== View a specific case ===============\n");
+        Console.Write("Enter case ID-number: ");
+        int id = int.Parse(Console.ReadLine());
+        var _case = await _caseService.GetAsync(x => x.Id == id);
+        if (_case != null)
+        {
+            Console.WriteLine($"\n Case-ID: {_case.Id} Created: {_case.Created} Modified: {_case.Modified}");
+            Console.WriteLine("------------------------------------------------------------------------");
+            Console.WriteLine($" Customer Name: {_case.CustomerFirstName} {_case.CustomerLastName}");
+            Console.WriteLine($" Customer Email: {_case.CustomerEmail}");
+            Console.WriteLine($" Customer Phonenumber: {_case.CustomerEmail}");
+            Console.WriteLine($" Customer Profession: {_case.CustomerProfession}");
+            Console.WriteLine($" Started by user-ID: {_case.UserId}");
+            Console.WriteLine($" --> Case status: {_case.Status.StatusName}\n");
+        }
+        else
+        {
+            Console.WriteLine(" Case-ID not found.");
+        }
     }
 }
