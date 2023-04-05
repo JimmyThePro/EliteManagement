@@ -10,37 +10,43 @@ internal class MenuService
     public async Task MainMenu(int userId)
     {
         Console.Clear();
-        Console.WriteLine("================================================");
-        Console.WriteLine("=============== Elite Management ===============");
-        Console.WriteLine("================================================\n");
-        Console.WriteLine(" [1] View all cases.");
-        Console.WriteLine(" [2] Create a new case.");
-        Console.WriteLine(" [3] View all users.");
-        Console.WriteLine(" [4] View a specific case.");
+        Console.WriteLine("============================================");
+        Console.WriteLine("============= Elite Management =============");
+        Console.WriteLine("============================================");
+        Console.WriteLine(" --- We are the best staffing company! ---\n");
+        Console.WriteLine(" [1] Create a New case.");
+        Console.WriteLine(" [2] View all Cases.");
+        Console.WriteLine(" [3] View a Specific case.");
+        Console.WriteLine(" [4] View all Users.");
+        Console.WriteLine(" [5] Update a specific case Status.");
         Console.Write(" \nChoose an option: ");
         var option = Console.ReadLine();
 
         switch (option)
         {
             case "1":
-                await AllCasesAsync();
-                break;
-
-            case "2":
                 await NewCaseAsync(userId);
                 break;
 
+            case "2":
+                await AllCasesAsync();
+                break;
+
             case "3":
-                await UsersAsync();
+                await GetCaseAsync();
                 break;
 
             case "4":
-                await GetCaseAsync();
+                await UsersAsync();
+                break;
+
+            case "5":
+                await UpdateStatusAsync();
                 break;
 
             default:
                 Console.Clear();
-                Console.Write(" No valid option! Please try again...");
+                Console.Write(" No valid option! Please try again.");
                 break;
         }
     }
@@ -48,7 +54,7 @@ internal class MenuService
     private async Task AllCasesAsync()
     {
         Console.Clear();
-        Console.WriteLine("========== All cases ==========\n");
+        Console.WriteLine("============ All cases ===========\n");
         foreach (var _case in await _caseService.GetAllAsync())
         {
             Console.WriteLine($" Case ID-number: {_case.Id}");
@@ -62,7 +68,7 @@ internal class MenuService
     private async Task UsersAsync()
     {
         Console.Clear();
-        Console.WriteLine("========== All users ==========\n");
+        Console.WriteLine("============ All users ===========\n");
         foreach (var _user in await _userService.GetAllAsync())
         {
             Console.WriteLine($" User-ID: {_user.Id}");
@@ -74,7 +80,6 @@ internal class MenuService
     private async Task NewCaseAsync(int userId)
     {
         var _entity = new CaseEntity { UserId = userId };
-
         Console.Clear();
         Console.WriteLine("========== Create a new case ==========\n");
         Console.Write(" Customer Firstname: ");
@@ -125,6 +130,27 @@ internal class MenuService
             Console.WriteLine($" Customer Profession: {_case.CustomerProfession}");
             Console.WriteLine($" Started by user-ID: {_case.UserId}");
             Console.WriteLine($" --> Case status: {_case.Status.StatusName}\n");
+        }
+        else
+        {
+            Console.WriteLine(" Case-ID not found.");
+        }
+    }
+
+    private async Task UpdateStatusAsync()
+    {
+        Console.Clear();
+        Console.WriteLine("=============== Update case status ===============\n");
+        Console.Write("Enter case ID-number: ");
+        int caseId = int.Parse(Console.ReadLine());
+        
+        var _case = await _caseService.GetAsync(x => x.Id == caseId);
+        if (_case != null)
+        {
+            Console.Write("Enter new status ID-number: ");
+            int statusId = int.Parse(Console.ReadLine());
+            await _caseService.UpdateCaseStatusAsync(caseId, statusId);
+            Console.WriteLine("Case status updated successfully.");
         }
         else
         {
