@@ -1,16 +1,35 @@
-﻿namespace EliteManagement.Models.Entities;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace EliteManagement.Models.Entities;
 
 internal class CaseEntity
 {
-    public Guid Id { get; set; }
-    public DateTime Created { get; set; }
-    public DateTime Modified { get; set; }
-    public string Title { get; set; } = null!;
-    public string Description { get; set; } = null!;
-    public Guid UserId { get; set; }
-    public int StatusTypeId { get; set; }
+    public int Id { get; set; }
+
+    [Required]
+    [StringLength(50)]
+    public string CustomerFirstName { get; set; } = null!;
+
+    [Required]
+    [StringLength(50)]
+    public string CustomerLastName { get; set; } = null!;
+
+    [Required]
+    [StringLength(100)]
+    public string CustomerEmail { get; set; } = null!;
+
+    [Column(TypeName = "char(13)")]
+    public string? CustomerPhoneNumber { get; set; }
+    public string CustomerProfession { get; set; } = null!;
+    public DateTime Created { get; set; } = DateTime.Now;
+    public DateTime Modified { get; set; } = DateTime.Now;
+
+    public int StatusId { get; set; } = 1;
+    public StatusTypeEntity Status { get; set; } = null!;
 
     public UserEntity User { get; set; } = null!;
-    public StatusTypeEntity StatusType { get; set; } = null!;
-    public ICollection<CommentEntity> Comments { get; set; } = new HashSet<CommentEntity>();
+
+    public ICollection<CommentEntity> Comments { get; set; } = new List<CommentEntity>();
 }

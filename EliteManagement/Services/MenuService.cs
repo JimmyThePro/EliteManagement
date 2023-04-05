@@ -6,7 +6,6 @@ internal class MenuService
 {
     private readonly UserService _userService = new();
     private readonly CaseService _caseService = new();
-    private readonly UserTypeService _userTypeService = new();
 
     public async Task MainMenu()
     {
@@ -25,7 +24,7 @@ internal class MenuService
         switch (option)
         {
             case "1":
-                await CreateUserTypeAsync();
+                await CreateUserAsync();
                 break;
 
             case "2":
@@ -42,16 +41,16 @@ internal class MenuService
         }
     }
 
-    public async Task<UserTypeEntity> CreateUserTypeAsync()
+    public async Task<UserEntity> CreateUserAsync()
     {
-        var _entity = new UserTypeEntity();
+        var _entity = new UserEntity();
         Console.Clear();
         Console.WriteLine("========== Create new case manager ==========\n");
         Console.Write(" Case manager: ");
-        _entity.TypeName = Console.ReadLine() ?? "";
-        Console.WriteLine($" --> '{_entity.TypeName}' created successfully!");
+        _entity.FirstName = Console.ReadLine() ?? "";
+        Console.WriteLine($" --> '{_entity.FirstName}' created successfully!");
 
-        return await _userTypeService.SaveAsync(_entity);
+        return await _userService.SaveAsync(_entity);
     }
 
     private async Task AllCasesAsync()
@@ -62,13 +61,17 @@ internal class MenuService
         {
             Console.WriteLine($"| Case ID: {_case.Id} | Created: {_case.Created} | Modified: {_case.Modified} |");
             Console.WriteLine("--------------------------------------------------------------------------------");
-            Console.WriteLine($"Title: {_case.Title} \n --> {_case.StatusType.StatusName}");
+            
         }
     }
 
     private async Task NewCaseAsync()
     {
+        var _entity = new CaseEntity();
         
+        Console.Clear();
+        Console.WriteLine("========== Create a new case ==========");
+        Console.Write(" Customer firstname: ");
     }
 
 

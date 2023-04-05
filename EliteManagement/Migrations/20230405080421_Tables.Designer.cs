@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EliteManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230403143222_Tables")]
+    [Migration("20230405080421_Tables")]
     partial class Tables
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace EliteManagement.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EliteManagement.Models.Entities.AddressEntity", b =>
+            modelBuilder.Entity("EliteManagement.Models.Entities.CaseEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,54 +33,43 @@ namespace EliteManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("char(6)");
-
-                    b.Property<string>("StreetName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Addresses");
-                });
-
-            modelBuilder.Entity("EliteManagement.Models.Entities.CaseEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("CustomerEmail")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CustomerFirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CustomerLastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CustomerPhoneNumber")
+                        .HasColumnType("char(13)");
+
+                    b.Property<string>("CustomerProfession")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Modified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("StatusTypeId")
+                    b.Property<int>("StatusId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StatusTypeId");
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("UserId");
 
@@ -93,8 +82,8 @@ namespace EliteManagement.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CaseId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("CaseId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Comment")
                         .IsRequired()
@@ -103,14 +92,9 @@ namespace EliteManagement.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CaseId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -138,9 +122,6 @@ namespace EliteManagement.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -160,40 +141,16 @@ namespace EliteManagement.Migrations
                         .IsRequired()
                         .HasColumnType("char(13)");
 
-                    b.Property<int>("UserTypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("UserTypeId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("EliteManagement.Models.Entities.UserTypeEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("TypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserTypes");
-                });
-
             modelBuilder.Entity("EliteManagement.Models.Entities.CaseEntity", b =>
                 {
-                    b.HasOne("EliteManagement.Models.Entities.StatusTypeEntity", "StatusType")
+                    b.HasOne("EliteManagement.Models.Entities.StatusTypeEntity", "Status")
                         .WithMany("Cases")
-                        .HasForeignKey("StatusTypeId")
+                        .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -203,7 +160,7 @@ namespace EliteManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("StatusType");
+                    b.Navigation("Status");
 
                     b.Navigation("User");
                 });
@@ -213,42 +170,10 @@ namespace EliteManagement.Migrations
                     b.HasOne("EliteManagement.Models.Entities.CaseEntity", "Case")
                         .WithMany("Comments")
                         .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EliteManagement.Models.Entities.UserEntity", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Case");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("EliteManagement.Models.Entities.UserEntity", b =>
-                {
-                    b.HasOne("EliteManagement.Models.Entities.AddressEntity", "Address")
-                        .WithMany("Users")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EliteManagement.Models.Entities.UserTypeEntity", "UserType")
-                        .WithMany("Users")
-                        .HasForeignKey("UserTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Address");
-
-                    b.Navigation("UserType");
-                });
-
-            modelBuilder.Entity("EliteManagement.Models.Entities.AddressEntity", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("EliteManagement.Models.Entities.CaseEntity", b =>
@@ -264,13 +189,6 @@ namespace EliteManagement.Migrations
             modelBuilder.Entity("EliteManagement.Models.Entities.UserEntity", b =>
                 {
                     b.Navigation("Cases");
-
-                    b.Navigation("Comments");
-                });
-
-            modelBuilder.Entity("EliteManagement.Models.Entities.UserTypeEntity", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }
